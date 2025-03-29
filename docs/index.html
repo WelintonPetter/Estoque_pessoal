@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque - Notion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shelf-map.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Controle de Estoque</h1>
+        
+        <div class="form-container">
+            <h2>Adicionar Item</h2>
+            <form id="addItemForm">
+                <div class="form-group">
+                    <label for="itemName">Nome do Item:</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemQuantity">Quantidade:</label>
+                    <input type="number" id="itemQuantity" min="1" required>
+                </div>
+                <!-- New field for Localizador -->
+                <div class="form-group">
+                    <label for="itemLocalizador">Localizador:</label>
+                    <input type="text" id="itemLocalizador" placeholder="Ex: a1">
+                </div>
+                <div class="form-group">
+                    <label for="itemCategory">Categoria:</label>
+                    <select id="itemCategory" required>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Adicionar</button>
+            </form>
+        </div>
+
+        <div class="dashboard-container">
+
+            <div class="chart-container">
+                <canvas id="stockChart"></canvas>
+            </div>
+        </div>
+
+        <div class="inventory-container">
+            <h2>Itens em Estoque</h2>
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar itens...">
+                </div>
+                <div class="filter-box">
+                    <select id="categoryFilter">
+                        <option value="">Todas as Categorias</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                    <select id="stockFilter">
+                        <option value="">Todos os Níveis</option>
+                        <option value="low">Estoque Baixo</option>
+                        <option value="normal">Estoque Normal</option>
+                        <option value="high">Estoque Alto</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <!-- Update the table header to include the Localizador column -->
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome do Item</th>
+                            <th>Quantidade</th>
+                            <th>Localizador</th>
+                            <th>Categoria</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryBody">
+                        <!-- Itens serão adicionados dinamicamente aqui -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="loading">Carregando dados...</div>
+            <div id="error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Modal para editar item -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Editar Item</h2>
+            <form id="editItemForm">
+                <input type="hidden" id="editItemId">
+                <div class="form-group">
+                    <label for="editItemName">Nome do Item:</label>
+                    <input type="text" id="editItemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editItemQuantity">Quantidade:</label>
+                    <input type="number" id="editItemQuantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="editItemLocalizador">Localizador:</label>
+                    <input type="text" id="editItemLocalizador">
+                </div>
+                <div class="form-group">
+                    <label for="editItemCategory">Categoria:</label>
+                    <select id="editItemCategory" required>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mapa da Prateleira -->
+    <div class="shelf-map-container" id="shelfMapContainer">
+        <span class="shelf-map-close" onclick="closeShelfMap()">&times;</span>
+        <div class="shelf-map">
+            <div class="shelf-cell" data-position="d1">D1</div>
+            <div class="shelf-cell" data-position="d2">D2</div>
+            <div class="shelf-cell" data-position="d3">D3</div>
+            <div class="shelf-cell" data-position="c1">C1</div>
+            <div class="shelf-cell" data-position="c2">C2</div>
+            <div class="shelf-cell" data-position="c3">C3</div>
+            <div class="shelf-cell" data-position="c4">C4</div>
+            <div class="shelf-cell" data-position="c5">C5</div>
+            <div class="shelf-cell" data-position="c6">C6</div>
+            <div class="shelf-cell" data-position="a1">A1</div>
+            <div class="shelf-cell" data-position="a2">A2</div>
+            <div class="shelf-cell" data-position="a3">A3</div>
+            <div class="shelf-cell" data-position="a4">A4</div>
+            <div class="shelf-cell" data-position="a5">A5</div>
+            <div class="shelf-cell" data-position="a6">A6</div>
+            <div class="shelf-cell" data-position="b1">B1</div>
+            <div class="shelf-cell" data-position="b2">B2</div>
+            <div class="shelf-cell" data-position="b3">B3</div>
+            <div class="shelf-cell" data-position="b4">B4</div>
+            <div class="shelf-cell" data-position="b5">B5</div>
+            <div class="shelf-cell" data-position="b6">B6</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
