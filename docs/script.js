@@ -40,7 +40,7 @@ configSection.innerHTML = `
     <div class="form-group">
         <label for="databaseId">ID da Database do Notion:</label>
         <input type="text" id="databaseId" placeholder="Cole o ID da sua database aqui">
-        <button id="quickAccessBtn" class="btn">Usar ID Padrão</button>
+        <button id="quickAccessBtn" class="btn">Estoque Pessoal</button>
         <button id="saveConfig" class="btn">Salvar e Conectar</button>
     </div>
     <p class="help-text">O ID da database pode ser encontrado na URL da sua página do Notion.</p>
