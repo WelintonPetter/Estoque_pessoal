@@ -114,28 +114,17 @@ function updateStockChart() {
 // Função para filtrar e buscar itens
 function filterItems() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const categoryFilter = document.getElementById('categoryFilter').value;
-    const stockFilter = document.getElementById('stockFilter').value;
 
     const filteredItems = inventoryItems.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm);
-        const matchesCategory = !categoryFilter || item.category === categoryFilter;
-        const matchesStock = !stockFilter || (
-            stockFilter === 'low' && item.quantity < 10 ||
-            stockFilter === 'normal' && item.quantity >= 10 && item.quantity < 50 ||
-            stockFilter === 'high' && item.quantity >= 50
-        );
-
-        return matchesSearch && matchesCategory && matchesStock;
+        return matchesSearch;
     });
 
     displayInventoryItems(filteredItems);
 }
 
-// Adicionar event listeners para busca e filtros
+// Adicionar event listener apenas para busca
 document.getElementById('searchInput').addEventListener('input', filterItems);
-document.getElementById('categoryFilter').addEventListener('change', filterItems);
-document.getElementById('stockFilter').addEventListener('change', filterItems);
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', async () => {
