@@ -60,13 +60,55 @@
 }
 
 .shelf-cell.selected {
-    background: linear-gradient(145deg, #4CAF50 0%, #388E3C 100%);
-    color: white;
-    border-color: #2E7D32;
-    box-shadow: 0 0 15px rgba(76,175,80,0.6);
-    transform: scale(1.02);
+    background: linear-gradient(145deg, #43e97b 0%, #38f9d7 100%);
+    color: #222;
+    border-color: #00b894;
+    box-shadow: 0 0 25px 8px rgba(67,233,123,0.25);
+    transform: scale(1.08) rotate(-2deg);
+    transition: all 0.25s cubic-bezier(.4,2,.6,1);
 }
 
+.shelf-map-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 26px;
+    color: #ff7675;
+    background: #23272f;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ff7675;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    box-shadow: 0 2px 8px rgba(255,118,117,0.08);
+}
+.shelf-map-close:hover {
+    background: #ff7675;
+    color: #23272f;
+    border: 2px solid #23272f;
+}
+.shelf-map-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    background: #23272f;
+    padding: 24px 24px 18px 24px;
+    border-radius: 8px;
+    border: 1.5px solid #444;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    z-index: 1000;
+    display: none;
+    animation: shelfMapFadeIn 0.4s cubic-bezier(.4,2,.6,1);
+}
+@keyframes shelfMapFadeIn {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(0.95); }
+}
 .shelf-map-close {
     position: absolute;
     top: 10px;
